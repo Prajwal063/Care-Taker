@@ -6,11 +6,11 @@ const Hero = () => {
   return (
     <div id="hero" className="bg-sky-100 flex flex-col md:flex-row items-center justify-center py-8 md:py-12">
       {/* Left Side */}
-      <div className="md:w-1/2 flex flex-col items-start justify-center px-10 pt-12 md:pt-0">
+      <div className="md:w-1/2 flex flex-col items-start justify-center md:px-10 px-4 pt-12 md:pt-0">
         <h1 className="text-3xl font-bold text-gray-800 md:text-5xl mb-4 py-6">
           A nurturing, supportive community platform.
         </h1>
-        <p className="text-lg text-gray-700 md:text-xl mb-10 text-justify">
+        <p className="text-lg text-gray-700 md:text-xl mb-7 text-justify">
           Care Taker connects people to orphanages and old age homes, fostering positive impact through visits, donations, and events.
         </p>
         <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-7 rounded-full transition duration-300 ease-in-out md:text-lg">

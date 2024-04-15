@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function renderCard(imageSrc, title, description) {
   return (
-    <div className="relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96 mb-8 sm:mb-8 pb-6 sm:pb-8">
+    <div className="relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl md:w-96 w-90 mb-8 sm:mb-8 pb-6 sm:pb-8">
       <div className="relative h-56 mx-4 -mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500 shadow-blue-gray-500/40">
         <img src={imageSrc} alt="card"/>
       </div>
@@ -93,7 +93,7 @@ function What() {
             Services
           </h2>
          
-          <div className=" py-8 md-2 flex flex-col items-center justify-center">
+          <div className="py-8 md-2 flex flex-col items-center justify-center">
             <div className="flex flex-wrap justify-center text-justify gap-8 md:gap-8 sm:pb-0">
               {renderedCards}
             </div>

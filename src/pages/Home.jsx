@@ -27,7 +27,8 @@ const Home = () => {
       <Contact/>
       <Footer/>
 
-      <div className="fixed bottom-10 right-4">
+      
+      <div className="fixed bottom-4 right-4">
       <button 
           onClick={scrollToTop}
           className="px-0 py-2 rounded-full">
