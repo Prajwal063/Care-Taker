@@ -15,7 +15,7 @@ const Footer = () => {
               </ul>
           </div>
           <hr className="my-3 border-gray-200 sm:mx-auto lg:my-8" />
-          <span className="block text-gray-500 md:text-center md:text-sm sm:text-xs text-center">© 2024 <a href="/" className="hover:underline">Care Take</a>. All Rights Reserved.</span>
+          <span className="block text-gray-500 md:text-center md:text-sm sm:text-xs text-center">© 2024 <a href="/" className="hover:underline">Care Taker</a>. All Rights Reserved.</span>
       </div>
     </footer>
   );
