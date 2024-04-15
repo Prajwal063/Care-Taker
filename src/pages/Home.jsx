@@ -33,7 +33,7 @@ const Home = () => {
           onClick={scrollToTop}
           className="px-0 py-2 rounded-full">
           <img
-              className="w-[40px] h-[40px] md:w-[30px] md:h-[30px]"
+              className="w-[40px] h-[40px] md:w-[40px] md:h-[40px]"
               src={scroll}
               alt="Scroll icon"/>
         </button>

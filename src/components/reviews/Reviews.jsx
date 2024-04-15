@@ -37,8 +37,8 @@ function ReviewCard({ imageSrc, name, position, comment }) {
           </p>
         </div>
       </div>
-      <div className="p-0 mb-6">
-        <p className="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+      <div className="p-4 mb-6 text-justify">
+        <p className="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
           "{comment}"
         </p>
       </div>
@@ -49,24 +49,24 @@ function ReviewCard({ imageSrc, name, position, comment }) {
 function Reviews() {
   const reviews = [
     {
-      imageSrc: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
-      name: 'Tania Andrew',
-      position: 'Frontend Lead @ Google',
-      comment: 'I found solution to all my design needs from Creative Tim. I use them as a freelancer in my hobby projects for fun! And its really affordable, very humble guys !!!',
+      imageSrc: 'https://media.licdn.com/dms/image/D5603AQHQXM5XlUqjTg/profile-displayphoto-shrink_800_800/0/1705721021390?e=1718841600&v=beta&t=_IQb_Fg1Tf_BSN1QMhRWIiurjiiGSEWoCwzlf1QSPHk',
+      name: 'Manu M Benakal',
+      position: 'Co-founder of CosmicTech.io',
+      comment: 'The website\'s sleek UI design makes navigation effortless, while it\'s vision for fostering community engagement shines through every aspect.',
     },
     
     {
-      imageSrc: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
-      name: 'Tania Andrew',
-      position: 'Frontend Lead @ Google',
-      comment: 'I found solution to all my design needs from Creative Tim. I use them as a freelancer in my hobby projects for fun! And its really affordable, very humble guys !!!',
+      imageSrc: 'https://media.licdn.com/dms/image/D5603AQFfHKWK90jPyQ/profile-displayphoto-shrink_800_800/0/1692205618654?e=1718841600&v=beta&t=DFOc3PLUENQ8p03li7vRN3wVd11t_p0y019Icdd46Qo',
+      name: 'Mohit R',
+      position: 'Associate Software Engineer @Betsol',
+      comment: 'Impressed by the intuitive user interface, which seamlessly aligns with the project\'s vision of promoting inclusivity and accessibility.',
     },
 
     {
-      imageSrc: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
-      name: 'Tania Andrew',
-      position: 'Frontend Lead @ Google',
-      comment: 'I found solution to all my design needs from Creative Tim. I use them as a freelancer in my hobby projects for fun! And its really affordable, very humble guys !!!',
+      imageSrc: 'https://avatars.githubusercontent.com/u/64711780?v=4',
+      name: 'Varun S Athreya',
+      position: 'Associate Software Engineer @Contentstack',
+      comment: 'The website\'s visually appealing layout not only captivates but also effectively communicates the project\'s noble vision of empowering individuals through technology.',
     },
   ];
 
