@@ -9,7 +9,7 @@ const about = () => {
             About Us
           </h2>
           <p className="text-gray-600 text-justify md:text-lg text-sm ">
-          Welcome to our platform dedicated to bringing joy and support to those in need at orphanages and old age homes. Our platform fosters joy and support for orphanages and old age homes, uniting caring individuals with those in need. Easily book visits to spend quality time, donate essential items like food and clothes, and organize heartwarming events. Your generosity creates lasting smiles, improving lives and forging unforgettable bonds. Join us in spreading kindness, celebrating birthdays, and creating cherished memories. Together, we make a profound impact, enriching the lives of those who need it most.
+          Welcome to our platform dedicated to bringing joy and support to those in need at orphanages and old age homes. Our platform fosters joy and support for orphanages and old age homes, uniting caring individuals with those in need. Easily book visits to spend quality time, donate essential items like food and clothes, and organize heartwarming events. Your generosity creates lasting smiles, improving lives and forging unforgettable bonds. Join us in spreading kindness, celebrating events, and creating cherished memories. Together, we make a profound impact, enriching the lives of those who need it most.
           </p>
         </div>
       </div>

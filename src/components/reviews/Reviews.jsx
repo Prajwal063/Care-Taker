@@ -7,7 +7,7 @@ function ReviewCard({ imageSrc, name, position, comment }) {
         <img
           src={imageSrc}
           alt={name}
-          className="relative inline-block h-[58px] w-[58px] !rounded-full object-cover object-center"
+          className="relative inline-block h-[58px] w-[58px] !rounded-full object-cover p-2 object-center"
         />
         <div className="flex w-full flex-col gap-0.5">
           <div className="flex items-center justify-between">

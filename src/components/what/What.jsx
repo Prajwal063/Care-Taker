@@ -69,6 +69,7 @@ function What() {
   // Handle pagination click
   const handlePageClick = (pageNumber) => {
     setCurrentPage(pageNumber);
+    document.getElementById('services').scrollIntoView({behavior:'smooth'})
   };
 
   // Generate pagination buttons

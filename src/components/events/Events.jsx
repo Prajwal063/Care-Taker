@@ -9,7 +9,7 @@ function Events() {
             Calender of Events
           </h2>
           <p className="text-gray-600 text-justify md:text-lg text-sm pb-10">
-          Welcome to our platform dedicated to bringing joy and support to those in need at orphanages and old age homes. Our platform fosters joy and support for orphanages and old age homes, uniting caring individuals with those in need. Easily book visits to spend quality time, donate essential items like food and clothes, and organize heartwarming events. Your generosity creates lasting smiles, improving lives and forging unforgettable bonds. Join us in spreading kindness, celebrating birthdays, and creating cherished memories. Together, we make a profound impact, enriching the lives of those who need it most.
+          Explore our events section to discover the array of happenings within our organization. From insightful seminars to lively celebrations, you'll find a diverse range of events to engage with. Attend at your leisure and become a part of our vibrant community. Join us in making each day special by participating in our gatherings and festivities, where every moment is an opportunity to connect, learn, and celebrate together. Embrace the spirit of camaraderie and enrich your experience with memorable interactions and shared experiences. Don't miss out on the chance to make lasting memories and foster meaningful connections through our exciting events.
           </p>
         </div>
       </div>
