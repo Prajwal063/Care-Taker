@@ -1,20 +1,18 @@
-import cors from "cors";
-import express, { Request, Response } from "express";
-import helmet from "helmet";
-import morgan from "morgan";
+import mongoose from 'mongoose';
+import { MONGO_URL, PORT } from './env';
 
-const app = express();
-app.use(helmet());
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+import server from './server';
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+(async function () {
+    try {
+        await mongoose.set('strictQuery', false).connect(MONGO_URL);
+        console.log('Connected to DB successfully!');
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+        server.listen(PORT, () => {
+            console.log(`Server listening on http://localhost:${PORT}/`);
+        });
+    } catch (err: any) {
+        console.log('Error starting the server!', err.message);
+        process.exit(0);
+    }
+})();
