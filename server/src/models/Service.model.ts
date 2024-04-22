@@ -13,7 +13,6 @@ const ServiceSchema = new mongoose.Schema(
         description: {
             type: String,
             required: true,
-            unique: true,
             trim: true,
             min: 3,
             max: 500,
@@ -21,13 +20,11 @@ const ServiceSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
             trim: true,
         },
         phone: {
             type: String,
             required: true,
-            unique: true,
             trim: true,
             min: 10,
             max: 10,
@@ -35,7 +32,6 @@ const ServiceSchema = new mongoose.Schema(
         address: {
             type: String,
             required: true,
-            unique: true,
             trim: true,
             max: 100,
         },

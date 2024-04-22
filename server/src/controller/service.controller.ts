@@ -91,7 +91,7 @@ export const updateService = async (
             new: true,
         });
 
-        res.status(204).json({
+        res.status(200).json({
             message: 'Service updated Successfully!',
             data: service,
         });
@@ -114,9 +114,15 @@ export const deleteService = async (
     try {
         const { id } = req.params;
 
-        await Service.findByIdAndDelete(id);
+        const service = await Service.findByIdAndDelete(id);
+        if (!service) {
+            throw new AppError({
+                message: 'Service not found!',
+                statusCode: 404,
+            });
+        }
 
-        res.status(204).json({
+        res.status(200).json({
             message: 'Service deleted Successfully!',
         });
     } catch (err: any) {

@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import passport from 'passport';
 import errorHandler from './middleware/errorHandler';
-import { authRoute, serviceRoute } from './routes';
+import { authRoute, eventRoute, serviceRoute } from './routes';
 
 const app = express();
 
@@ -33,6 +33,7 @@ app.get('/', (_, res) => {
 
 app.use('/auth', authRoute);
 app.use('/service', serviceRoute);
+app.use('/event', eventRoute);
 
 app.use(errorHandler);
 

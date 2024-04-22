@@ -1,6 +1,7 @@
 import express from 'express';
 import {
     createService,
+    deleteService,
     getAllServices,
     getServiceById,
     updateService,
@@ -19,6 +20,6 @@ router
     .route('/:id')
     .get(getServiceById)
     .put(validate(CreateServiceType), updateService)
-    .delete(getServiceById);
+    .delete(deleteService);
 
 export default router;
