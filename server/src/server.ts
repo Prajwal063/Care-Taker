@@ -1,8 +1,10 @@
+import cookieSession from 'cookie-session';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import errorHandler from './middleware/errorHandler';
+import passport from 'passport';
+import { authRoute } from './routes';
 
 const app = express();
 
@@ -11,7 +13,16 @@ app.use(helmet())
     .use(morgan('dev'))
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    .use(cors());
+    .use(cors())
+    .use(
+        cookieSession({
+            name: 'session',
+            keys: ['care-taker-key'],
+            maxAge: 24 * 60 * 60 * 100,
+        })
+    )
+    .use(passport.initialize())
+    .use(passport.session());
 
 app.get('/', (_, res) => {
     return res.status(200).json({
@@ -19,6 +30,8 @@ app.get('/', (_, res) => {
     });
 });
 
-app.use(errorHandler);
+app.use('/auth', authRoute);
+
+// app.use(errorHandler);
 
 export default app;
