@@ -4,7 +4,8 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import passport from 'passport';
-import { authRoute } from './routes';
+import errorHandler from './middleware/errorHandler';
+import { authRoute, serviceRoute } from './routes';
 
 const app = express();
 
@@ -31,7 +32,8 @@ app.get('/', (_, res) => {
 });
 
 app.use('/auth', authRoute);
+app.use('/service', serviceRoute);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
