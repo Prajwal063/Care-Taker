@@ -6,7 +6,7 @@ import {
     getServiceById,
     updateService,
 } from '../controller/service.controller';
-import validate from '../middleware/validate';
+import { validate } from '../middleware';
 import { CreateServiceType } from '../types';
 
 const router = express.Router();

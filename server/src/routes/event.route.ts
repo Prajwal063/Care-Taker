@@ -8,7 +8,7 @@ import {
     unregisterForEvent,
     updateEvent,
 } from '../controller/event.controller';
-import validate from '../middleware/validate';
+import { isAuthenticated, validate } from '../middleware';
 import { CreateEventType } from '../types';
 
 const router = express.Router();
@@ -24,7 +24,7 @@ router
     .put(validate(CreateEventType), updateEvent)
     .delete(deleteEvent);
 
-router.route('/:id/register').post(registerForEvent);
-router.route('/:id/unregister').post(unregisterForEvent);
+router.route('/:id/register').post(isAuthenticated, registerForEvent);
+router.route('/:id/unregister').post(isAuthenticated, unregisterForEvent);
 
 export default router;

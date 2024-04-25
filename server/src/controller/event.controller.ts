@@ -187,7 +187,7 @@ export const unregisterForEvent = async (
         await event.save();
 
         res.status(200).json({
-            message: 'Registered for event Successfully!',
+            message: 'Un-registered for event Successfully!',
             data: event,
         });
     } catch (err: any) {

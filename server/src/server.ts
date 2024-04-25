@@ -1,20 +1,25 @@
 import cookieSession from 'cookie-session';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import passport from 'passport';
-import errorHandler from './middleware/errorHandler';
-import { authRoute, eventRoute, serviceRoute } from './routes';
+import { errorHandler } from './middleware';
+import { authRoute, eventRoute, serviceRoute, userRoute } from './routes';
 
 const app = express();
+const corsOptions: CorsOptions = {
+    origin: '*',
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+};
 
 app.use(helmet())
     .use(helmet.hidePoweredBy())
     .use(morgan('dev'))
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    .use(cors())
+    .use(cors(corsOptions))
     .use(
         cookieSession({
             name: 'session',
@@ -34,6 +39,7 @@ app.get('/', (_, res) => {
 app.use('/auth', authRoute);
 app.use('/service', serviceRoute);
 app.use('/event', eventRoute);
+app.use('/user', userRoute);
 
 app.use(errorHandler);
 
