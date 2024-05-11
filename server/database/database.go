@@ -7,5 +7,5 @@ import (
 var Client *mongo.Client
 
 func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	return client.Database("go-jwt").Collection(collectionName)
+	return client.Database("care-taker").Collection(collectionName)
 }
