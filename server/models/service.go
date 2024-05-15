@@ -31,3 +31,27 @@ type ServiceResponse struct {
 	CreatedAt   time.Time `json:"createdAt,omitempty"`
 	UpdatedAt   time.Time `json:"updatedAt,omitempty"`
 }
+
+// ToServiceResponse converts an Service to an ServiceResponse.
+func ToServiceResponse(service Service) ServiceResponse {
+	return ServiceResponse{
+		ID:          service.ID.Hex(),
+		Title:       service.Title,
+		Description: service.Description,
+		Email:       service.Email,
+		Phone:       service.Phone,
+		Address:     service.Address,
+		Picture:     service.Picture,
+		CreatedAt:   service.CreatedAt,
+		UpdatedAt:   service.UpdatedAt,
+	}
+}
+
+// ToServiceResponseArray converts a slice of Service to a slice of ServiceResponse.
+func ToServiceResponseArray(services []Service) []ServiceResponse {
+	var serviceResponses []ServiceResponse
+	for _, service := range services {
+		serviceResponses = append(serviceResponses, ToServiceResponse(service))
+	}
+	return serviceResponses
+}
