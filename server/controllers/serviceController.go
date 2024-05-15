@@ -16,7 +16,7 @@ func GetAllServices(c *gin.Context) {
 	search := c.Query("search")
 	filter := bson.M{}
 	if search != "" {
-		filter = bson.M{"name": bson.M{"$regex": search}}
+		filter = bson.M{"title": bson.M{"$regex": search, "$options": "i"}}
 	}
 
 	cursor, err := database.ServiceCollection.Find(context.TODO(), filter)
