@@ -5,7 +5,9 @@ import (
 )
 
 var Client *mongo.Client
+var ServiceCollection *mongo.Collection
+var EventCollection *mongo.Collection
 
-func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	return client.Database("care-taker").Collection(collectionName)
+func OpenCollection(collectionName string) *mongo.Collection {
+	return Client.Database("care-taker").Collection(collectionName)
 }

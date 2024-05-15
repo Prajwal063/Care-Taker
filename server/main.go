@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"server/database"
-	"server/initializers"
+
+	"care-taker/database"
+	"care-taker/initializers"
+	"care-taker/routes"
 
 	helmet "github.com/danielkov/gin-helmet"
 	"github.com/gin-gonic/gin"
@@ -14,6 +16,7 @@ import (
 func init() {
 	initializers.Env()
 	database.Client = initializers.Database()
+	initializers.Collections()
 }
 
 func main() {
@@ -33,6 +36,8 @@ func main() {
 			"message": "Hello World",
 		})
 	})
+
+	routes.ServiceRoutes(router.Group("/service"))
 
 	err := router.Run(":" + port)
 	if err != nil {

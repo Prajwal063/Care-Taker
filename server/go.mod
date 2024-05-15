@@ -1,4 +1,4 @@
-module server
+module care-taker
 
 go 1.22.2
 

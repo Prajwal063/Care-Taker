@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	"care-taker/database"
+
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -30,7 +32,12 @@ func Database() *mongo.Client {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Connected to MongoDB!")
+	fmt.Println("Connected to Database!")
 
 	return client
+}
+
+func Collections() {
+	database.ServiceCollection = database.OpenCollection("services")
+	database.EventCollection = database.OpenCollection("events")
 }
