@@ -38,6 +38,7 @@ func main() {
 	})
 
 	routes.ServiceRoutes(router.Group("/service"))
+	routes.EventRoutes(router.Group("/event"))
 
 	err := router.Run(":" + port)
 	if err != nil {

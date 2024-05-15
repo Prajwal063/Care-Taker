@@ -53,7 +53,7 @@ func CreateService(c *gin.Context) {
 	}
 	service.ID = serviceID.InsertedID.(primitive.ObjectID)
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Service created Successfully!", "data": service})
+	c.JSON(http.StatusCreated, gin.H{"message": "Service created Successfully!", "data": models.ToServiceResponse(service)})
 }
 
 func GetServiceById(c *gin.Context) {

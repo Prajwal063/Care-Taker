@@ -43,3 +43,32 @@ type EventResponse struct {
 	CreatedAt       time.Time `json:"createdAt,omitempty"`
 	UpdatedAt       time.Time `json:"updatedAt,omitempty"`
 }
+
+// ToEventResponse converts an Event to an EventResponse.
+func ToEventResponse(event Event) EventResponse {
+	return EventResponse{
+		ID:              event.ID.Hex(),
+		Title:           event.Title,
+		Description:     event.Description,
+		Email:           event.Email,
+		Phone:           event.Phone,
+		Address:         event.Address,
+		Picture:         event.Picture,
+		Date:            event.Date,
+		Time:            event.Time,
+		Price:           event.Price,
+		Status:          event.Status,
+		RegisteredUsers: event.RegisteredUsers,
+		CreatedAt:       event.CreatedAt,
+		UpdatedAt:       event.UpdatedAt,
+	}
+}
+
+// ToEventResponseArray converts a slice of Event to a slice of EventResponse.
+func ToEventResponseArray(events []Event) []EventResponse {
+	var eventResponses []EventResponse
+	for _, event := range events {
+		eventResponses = append(eventResponses, ToEventResponse(event))
+	}
+	return eventResponses
+}
