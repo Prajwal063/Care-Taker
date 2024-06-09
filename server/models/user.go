@@ -17,6 +17,7 @@ type User struct {
 	Email     string             `bson:"email" validate:"required,email"`
 	GoogleID  string             `bson:"googleId" validate:"required"`
 	Picture   string             `bson:"picture" validate:"required"`
+	IsAdmin   bool               `bson:"isAdmin" validate:"required"`
 	CreatedAt time.Time          `bson:"createdAt,omitempty"`
 	UpdatedAt time.Time          `bson:"updatedAt,omitempty"`
 }
@@ -45,5 +46,6 @@ func (u *User) ToJSON() map[string]interface{} {
 		"email":    u.Email,
 		"googleId": u.GoogleID,
 		"picture":  u.Picture,
+		"isAdmin":  u.IsAdmin,
 	}
 }

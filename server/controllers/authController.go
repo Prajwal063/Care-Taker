@@ -44,6 +44,7 @@ func AuthCallback(c *gin.Context) {
 			"name":     user.Name,
 			"googleId": user.UserID,
 			"picture":  user.AvatarURL,
+			"isAdmin":  false,
 		})
 		if err != nil {
 			log.Println(err)
