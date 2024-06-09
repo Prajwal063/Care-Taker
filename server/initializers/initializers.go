@@ -40,4 +40,5 @@ func Database() *mongo.Client {
 func Collections() {
 	database.ServiceCollection = database.OpenCollection("services")
 	database.EventCollection = database.OpenCollection("events")
+	database.UserCollection = database.OpenCollection("users")
 }
