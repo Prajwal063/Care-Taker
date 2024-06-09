@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"care-taker/database"
+	"care-taker/helpers"
 	"care-taker/models"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -118,4 +120,89 @@ func DeleteEvent(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Event deleted Successfully!"})
+}
+
+func RegisterToEvent(c *gin.Context) {
+	eventID, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		return
+	}
+
+	session := sessions.Default(c)
+	userID := session.Get("user")
+	if userID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user not logged in"})
+		return
+	}
+
+	var user models.User
+	err = database.UserCollection.FindOne(context.TODO(), bson.M{"googleId": userID}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user details"})
+		return
+	}
+
+	var event models.Event
+	err = database.EventCollection.FindOne(context.TODO(), bson.M{"_id": eventID}).Decode(&event)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch event details"})
+		return
+	}
+
+	if event.Status == "closed" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Event registration closed"})
+		return
+	}
+
+	if helpers.SliceContains(event.RegisteredUsers, user.ID.Hex()) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User already registered for the event"})
+		return
+	}
+
+	res, err := database.EventCollection.UpdateOne(context.TODO(), bson.M{"_id": eventID}, bson.M{"$addToSet": bson.M{"participants": user.ID}})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register for event"})
+		return
+	}
+	if res.MatchedCount == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Registered for event Successfully!"})
+}
+
+func UnregisterFromEvent(c *gin.Context) {
+	eventID, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		return
+	}
+
+	session := sessions.Default(c)
+	userID := session.Get("user")
+	if userID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user not logged in"})
+		return
+	}
+
+	var user models.User
+	err = database.UserCollection.FindOne(context.TODO(), bson.M{"googleId": userID}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user details"})
+		return
+	}
+
+	res, err := database.EventCollection.UpdateOne(context.TODO(), bson.M{"_id": eventID}, bson.M{"$pull": bson.M{"participants": user.ID}})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unregister from event"})
+		return
+	}
+	if res.MatchedCount == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Unregistered from event Successfully!"})
 }
