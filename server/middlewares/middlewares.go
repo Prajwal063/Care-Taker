@@ -1,10 +1,11 @@
 package middlewares
 
 import (
-	"care-taker/database"
-	"care-taker/models"
 	"context"
 	"net/http"
+
+	"care-taker/database"
+	"care-taker/models"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,7 @@ func IsAuthenticated(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	c.Set("userId", user)
 	c.Next()
 }
 
@@ -43,5 +45,6 @@ func IsAdmin(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	c.Set("userId", userId)
 	c.Next()
 }

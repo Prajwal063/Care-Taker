@@ -53,6 +53,7 @@ func main() {
 	routes.AuthRoutes(router.Group("/auth"))
 	routes.ServiceRoutes(router.Group("/service"))
 	routes.EventRoutes(router.Group("/event"))
+	routes.UserRoutes(router.Group("/user"))
 
 	err := router.Run("localhost:" + port)
 	if err != nil {
