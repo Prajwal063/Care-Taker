@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"context"
+	"fmt"
 	"net/http"
 
 	"care-taker/database"
@@ -14,6 +14,23 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Helper function to check if a user is logged in and fetch user details
+func getSessionUser(c *gin.Context) (*models.User, error) {
+	session := sessions.Default(c)
+	userID := session.Get("user")
+	if userID == nil {
+		return nil, fmt.Errorf("user not logged in")
+	}
+
+	var user models.User
+	err := database.UserCollection.FindOne(c.Request.Context(), bson.M{"googleId": userID}).Decode(&user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch user details: %v", err)
+	}
+
+	return &user, nil
+}
+
 func GetAllEvents(c *gin.Context) {
 	search := c.Query("search")
 	filter := bson.M{}
@@ -21,20 +38,20 @@ func GetAllEvents(c *gin.Context) {
 		filter = bson.M{"title": bson.M{"$regex": search, "$options": "i"}}
 	}
 
-	cursor, err := database.EventCollection.Find(context.TODO(), filter)
+	cursor, err := database.EventCollection.Find(c.Request.Context(), filter)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch events"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to fetch events")
 		return
 	}
-	defer cursor.Close(context.TODO())
+	defer cursor.Close(c.Request.Context())
 
 	var events []models.Event
-	if err := cursor.All(context.TODO(), &events); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode events"})
+	if err := cursor.All(c.Request.Context(), &events); err != nil {
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to decode events")
 		return
 	}
 	if len(events) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "No events found"})
+		helpers.SendResponse(c, http.StatusNotFound, "No events found")
 		return
 	}
 
@@ -44,13 +61,13 @@ func GetAllEvents(c *gin.Context) {
 func CreateEvent(c *gin.Context) {
 	var event models.Event
 	if err := c.BindJSON(&event); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 
-	eventID, err := database.EventCollection.InsertOne(context.TODO(), event)
+	eventID, err := database.EventCollection.InsertOne(c.Request.Context(), event)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create event"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to create event")
 		return
 	}
 	event.ID = eventID.InsertedID.(primitive.ObjectID)
@@ -61,13 +78,13 @@ func CreateEvent(c *gin.Context) {
 func GetEventById(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid event ID")
 		return
 	}
 	var event models.Event
-	err = database.EventCollection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&event)
+	err = database.EventCollection.FindOne(c.Request.Context(), bson.M{"_id": id}).Decode(&event)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		helpers.SendResponse(c, http.StatusNotFound, "Event not found")
 		return
 	}
 
@@ -77,23 +94,23 @@ func GetEventById(c *gin.Context) {
 func UpdateEvent(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid event ID")
 		return
 	}
 
 	var updatedEvent models.Event
 	if err := c.BindJSON(&updatedEvent); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 
-	res, err := database.EventCollection.UpdateOne(context.TODO(), bson.M{"_id": id}, bson.M{"$set": updatedEvent})
+	res, err := database.EventCollection.UpdateOne(c.Request.Context(), bson.M{"_id": id}, bson.M{"$set": updatedEvent})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update event"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to update event")
 		return
 	}
 	if res.MatchedCount == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		helpers.SendResponse(c, http.StatusNotFound, "Event not found")
 		return
 	}
 
@@ -105,104 +122,87 @@ func UpdateEvent(c *gin.Context) {
 func DeleteEvent(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid event ID")
 		return
 	}
 
-	res, err := database.EventCollection.DeleteOne(context.TODO(), bson.M{"_id": id})
+	res, err := database.EventCollection.DeleteOne(c.Request.Context(), bson.M{"_id": id})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete event"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to delete event")
 		return
 	}
 	if res.DeletedCount == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		helpers.SendResponse(c, http.StatusNotFound, "Event not found")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Event deleted Successfully!"})
+	helpers.SendResponse(c, http.StatusOK, "Event deleted Successfully!")
 }
 
 func RegisterToEvent(c *gin.Context) {
 	eventID, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid event ID")
 		return
 	}
-
-	session := sessions.Default(c)
-	userID := session.Get("user")
-	if userID == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "user not logged in"})
-		return
-	}
-
-	var user models.User
-	err = database.UserCollection.FindOne(context.TODO(), bson.M{"googleId": userID}).Decode(&user)
+	user, err := getSessionUser(c)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user details"})
+		helpers.SendResponse(c, http.StatusUnauthorized, err.Error())
 		return
 	}
 
 	var event models.Event
-	err = database.EventCollection.FindOne(context.TODO(), bson.M{"_id": eventID}).Decode(&event)
+	err = database.EventCollection.FindOne(c.Request.Context(), bson.M{"_id": eventID}).Decode(&event)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch event details"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to fetch event details")
 		return
 	}
 
 	if event.Status == "closed" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Event registration closed"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Event registration closed")
 		return
 	}
 
 	if helpers.SliceContains(event.RegisteredUsers, user.ID.Hex()) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User already registered for the event"})
+		helpers.SendResponse(c, http.StatusBadRequest, "USer already registered for event")
 		return
 	}
 
-	res, err := database.EventCollection.UpdateOne(context.TODO(), bson.M{"_id": eventID}, bson.M{"$addToSet": bson.M{"participants": user.ID}})
+	res, err := database.EventCollection.UpdateOne(c.Request.Context(), bson.M{"_id": eventID}, bson.M{"$addToSet": bson.M{"participants": user.ID}})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register for event"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to register for event")
 		return
 	}
 	if res.MatchedCount == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		helpers.SendResponse(c, http.StatusNotFound, "Event not found")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Registered for event Successfully!"})
+	helpers.SendResponse(c, http.StatusOK, "Registered for event Successfully!")
 }
 
 func UnregisterFromEvent(c *gin.Context) {
 	eventID, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid event ID")
 		return
 	}
 
-	session := sessions.Default(c)
-	userID := session.Get("user")
-	if userID == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "user not logged in"})
-		return
-	}
-
-	var user models.User
-	err = database.UserCollection.FindOne(context.TODO(), bson.M{"googleId": userID}).Decode(&user)
+	user, err := getSessionUser(c)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user details"})
+		helpers.SendResponse(c, http.StatusUnauthorized, err.Error())
 		return
 	}
 
-	res, err := database.EventCollection.UpdateOne(context.TODO(), bson.M{"_id": eventID}, bson.M{"$pull": bson.M{"participants": user.ID}})
+	res, err := database.EventCollection.UpdateOne(c.Request.Context(), bson.M{"_id": eventID}, bson.M{"$pull": bson.M{"participants": user.ID}})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unregister from event"})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to unregister from event")
 		return
 	}
 	if res.MatchedCount == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		helpers.SendResponse(c, http.StatusNotFound, "Event not found")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Unregistered from event Successfully!"})
+	helpers.SendResponse(c, http.StatusOK, "Unregistered from event Successfully!")
 }

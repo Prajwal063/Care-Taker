@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"context"
 	"net/http"
 
 	"care-taker/database"
@@ -33,7 +32,7 @@ func IsAdmin(c *gin.Context) {
 	}
 
 	var user models.User
-	err := database.UserCollection.FindOne(context.TODO(), gin.H{"googleId": userId}).Decode(&user)
+	err := database.UserCollection.FindOne(c.Request.Context(), gin.H{"googleId": userId}).Decode(&user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to verify user: " + err.Error()})
 		c.Abort()

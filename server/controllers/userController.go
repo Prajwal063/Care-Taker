@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"context"
 	"net/http"
 
 	"care-taker/database"
+	"care-taker/helpers"
 	"care-taker/models"
 
 	"github.com/gin-gonic/gin"
@@ -14,9 +14,9 @@ func GetUser(c *gin.Context) {
 	userId := c.MustGet("userId").(string)
 
 	var user models.User
-	err := database.UserCollection.FindOne(context.TODO(), gin.H{"googleId": userId}).Decode(&user)
+	err := database.UserCollection.FindOne(c.Request.Context(), gin.H{"googleId": userId}).Decode(&user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user: " + err.Error()})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to fetch user: "+err.Error())
 		return
 	}
 
@@ -29,13 +29,13 @@ func UpdateUser(c *gin.Context) {
 	var user models.User
 	err := c.BindJSON(&user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request: " + err.Error()})
+		helpers.SendResponse(c, http.StatusBadRequest, "Invalid request payload: "+err.Error())
 		return
 	}
 
-	_, err = database.UserCollection.UpdateOne(context.TODO(), gin.H{"googleId": userId}, gin.H{"$set": user})
+	_, err = database.UserCollection.UpdateOne(c.Request.Context(), gin.H{"googleId": userId}, gin.H{"$set": user})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user: " + err.Error()})
+		helpers.SendResponse(c, http.StatusInternalServerError, "Failed to update user: "+err.Error())
 		return
 	}
 

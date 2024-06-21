@@ -15,8 +15,9 @@ import (
 func BeginAuth(c *gin.Context) {
 	provider := c.Param("provider")
 	fmt.Println(provider)
-	c.Request = c.Request.WithContext(context.WithValue(context.Background(), "provider", provider))
-
+	//c.Request = c.Request.WithContext(context.WithValue(context.Background(), "provider", provider))
+	ctx:=context.WithValue(c.Request.Context(), "provider", provider)
+	c.Request = c.Request.WithContext(ctx)
 	gothic.BeginAuthHandler(c.Writer, c.Request)
 }
 
@@ -36,10 +37,10 @@ func AuthCallback(c *gin.Context) {
 		return
 	}
 
-	userEntry := database.UserCollection.FindOne(context.TODO(), gin.H{"email": user.Email})
+	userEntry := database.UserCollection.FindOne(c.Request.Context(), gin.H{"email": user.Email})
 	fmt.Println("userEntry", userEntry)
 	if userEntry.Err() != nil {
-		_, err := database.UserCollection.InsertOne(context.TODO(), gin.H{
+		_, err := database.UserCollection.InsertOne(c.Request.Context(), gin.H{
 			"email":    user.Email,
 			"name":     user.Name,
 			"googleId": user.UserID,
