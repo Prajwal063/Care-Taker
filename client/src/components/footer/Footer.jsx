@@ -11,7 +11,8 @@ const Footer = () => {
               </a>
               <ul className="flex items-center justify-center text-sm text-gray-500 sm:mb-0">
                 <span className="self-center text-lg font-semibold whitespace-nowrap">Created with ❤️
-                by <a className="hover:underline md:me-2" href = "https://prajwalp06.netlify.app/"> Prajwal P</a></span>   
+                by <a className="hover:underline md:me-2" href = "https://prajwalp06.netlify.app/"> Prajwal P</a>
+                <a className="hover:underline md:me-2" href = "https://varunsathreya.github.io/"> Varun S Athreya</a></span>   
               </ul>
           </div>
           <hr className="my-3 border-gray-200 sm:mx-auto lg:my-8" />
