@@ -24,7 +24,7 @@ const Hero = () => {
           <img src={image1} alt="Orphanage" className="w-full h-auto" />
         </div>
         <div className="text-gray-700 text-xs md:text-base sm:text-xs">
-          <a href="https://prajwalp06.netlify.app/" className="hover:underline">Prajwal P</a> | <a className="hover:underline md:me-2" href = "https://varunsathreya.github.io/"></a> | Bengaluru, India
+          <a href="https://prajwalp06.netlify.app/" className="hover:underline">Prajwal P</a> | <a className="hover:underline md:me-2" href = "https://varunsathreya.github.io/">Varun S Athreya</a> | Bengaluru, India
         </div>
       </div>
     </div>
